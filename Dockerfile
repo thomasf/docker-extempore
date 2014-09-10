@@ -1,55 +1,58 @@
-FROM ubuntu:saucy
+FROM ubuntu:trusty
 MAINTAINER s. rannou <mxs@sbrk.org>
 
 # deps
-RUN echo "deb http://archive.ubuntu.com/ubuntu saucy main universe" > /etc/apt/sources.list
-RUN apt-get update
-RUN apt-get upgrade
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y		    \
-    git				   		      			    \
-    binutils								    \
-    g++									    \
-    wget								    \
-    make								    \
-    portaudio19-dev							    \
-    libpcre3-dev							    \
-    mesa-common-dev							    \
-    libgl1-mesa-dev							    \
-    jackd								    \
-    librtmidi1								    \
-    lame								    \
-    vlc									    \
-    libavcodec-extra-53							    \
-    vlc-plugin-jack &&							    \
+# RUN echo "deb http://archive.ubuntu.com/ubuntu trusty main universe" > /etc/apt/sources.list
+RUN apt-get update && apt-get upgrade
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
+    git				   		    \
+    binutils						\
+    g++									\
+    wget								\
+    make								\
+    portaudio19-dev			\
+    libpcre3-dev				\
+    mesa-common-dev			\
+    libgl1-mesa-dev			\
+    jackd								\
+    librtmidi1					\
+    lame								\
+    vlc									\
+    libavcodec-extra-54	\
+    vlc-plugin-jack &&	\
     apt-get clean
 
 RUN git clone https://github.com/digego/extempore.git /extempore
 
-RUN wget http://llvm.org/releases/3.2/llvm-3.2.src.tar.gz -O llvm.tar.gz && \
-    tar -xf llvm.tar.gz && 				     		    \
-    rm -f llvm.tar.gz && 				  		    \
-    mv llvm-3.2.src /llvm &&						    \
-    cd /llvm/lib/AsmParser &&						    \
-    patch < /extempore/extras/llparser.patch &&				    \
-    cd /llvm &&				     				    \
-    mkdir /llvm-build &&						    \
-    ./configure --prefix=/llvm-build --enable-optimized &&		    \
-    make -j5 &&			     					    \
-    make install &&							    \
-    rm -rf /llvm
+RUN wget -qO- http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz | tar xvz && \
+    cd /llvm-3.4.1.src/lib/AsmParser &&                    \
+    patch < /extempore/extras/llparser.patch &&            \
+    cd /llvm-3.4.1.src &&                                  \
+    mkdir /llvm-build &&                                   \
+    ./configure --prefix=/llvm-build --enable-optimized && \
+    make -j5 &&                                            \
+    make install &&                                        \
+    rm -rf /llvm-3.4.1.src
 
 ENV EXT_LLVM_DIR /llvm-build
 
-RUN cd /extempore &&							    \
-    ./all.bash
+WORKDIR /extempore
 
-EXPOSE 8080
-EXPOSE 7098
-EXPOSE 7099
+RUN ./all.bash
 
-RUN adduser --system --shell /bin/bash --disabled-password --home /extempore extempore
-RUN chown -R extempore /extempore
-USER extempore
+# extempore primary process
+EXPOSE 7098 
+# extempore utility process
+EXPOSE 7099 
+# jack streaming port
+EXPOSE 8080 
 
-ADD run.bash /entrypoint.bash
-CMD /entrypoint.bash
+# RUN adduser --system --shell /bin/bash --disabled-password --home /extempore extempore
+# RUN chmod -R extempore /extempore
+# USER extempore
+
+RUN jackd --no-realtime -d dummy -r 44100 &
+RUN sleep 1
+RUN cvlc -vvv 'jack://channels=2:ports=.*' --sout '#transcode{acodec=mp3,ab=256,channels=2,samplerate=44100}:std{access=http,mux=mp3,dst=:8080}' &
+
+ENTRYPOINT ["/extempore"]
