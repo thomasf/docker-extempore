@@ -41,7 +41,5 @@ RUN ./all.bash
 EXPOSE 7098 
 # extempore utility process
 EXPOSE 7099 
-# jack streaming port
-EXPOSE 8080 
 
 ENTRYPOINT ["/extempore/extempore"]
