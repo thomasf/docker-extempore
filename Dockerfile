@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM debian:wheezy
 
 # based on an original dockerfile by Sébastien Rannou
 MAINTAINER Ben Swift <benjamin.j.swift@gmail.com>
@@ -9,8 +9,9 @@ RUN apt-get update && apt-get upgrade && DEBIAN_FRONTEND=noninteractive apt-get 
     git                                                  \
     binutils                                             \
     g++                                                  \
-    wget                                                 \
+    curl                                                 \
     make                                                 \
+    unzip                                                \
     portaudio19-dev                                      \
     libpcre3-dev                                         \
     libgl1-mesa-dev                                      \
@@ -20,11 +21,10 @@ RUN apt-get update && apt-get upgrade && DEBIAN_FRONTEND=noninteractive apt-get 
     apt-get clean
 
 # download extempore master branch
-RUN git clone https://github.com/digego/extempore.git /extempore
-
+RUN curl -L -o master.zip http://github.com/digego/extempore/zipball/master/ && unzip master.zip && mv $(ls | grep extempore) extempore
 # download, patch, and build LLVM
-RUN wget -q http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz -O llvm-3.4.1.src &&                                                                         \
-    tar -xf llvm-3.4.1.src &&                                                                                                                                 \
+RUN curl -O http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz &&                                                                                           \
+    tar -xf llvm-3.4.1.src.tar.gz &&                                                                                                                          \
     cd /llvm-3.4.1.src/lib/AsmParser &&                                                                                                                       \
     patch < /extempore/extras/llparser.patch &&                                                                                                               \
     cd /llvm-3.4.1.src &&                                                                                                                                     \
