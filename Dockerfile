@@ -4,7 +4,6 @@ FROM debian:wheezy
 MAINTAINER Ben Swift <benjamin.j.swift@gmail.com>
 
 # get deps
-# RUN echo "deb http://archive.ubuntu.com/ubuntu trusty main universe" > /etc/apt/sources.list
 RUN apt-get update && apt-get upgrade && DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
     git                                                  \
     binutils                                             \
