@@ -32,7 +32,7 @@ RUN curl -O http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz &&             
     rm -rf /llvm-3.4.1.src
 
 # download extempore
-RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/nodevice-audio/ && unzip source.zip && mv $(ls | grep extempore) extempore && rm source.zip
+RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/master/ && unzip source.zip && mv $(ls | grep extempore) extempore && rm source.zip
 
 # set LLVM environment var
 ENV EXT_LLVM_DIR /llvm-build
