@@ -4,11 +4,11 @@ FROM debian:wheezy
 MAINTAINER Ben Swift <benjamin.j.swift@gmail.com>
 
 # get deps
-RUN apt-get update && apt-get upgrade && DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
-    # git                                                  \
+RUN apt-get update --yes && apt-get upgrade --yes && apt-get install --yes \
     binutils                                             \
     g++                                                  \
     curl                                                 \
+    patch                                                \
     make                                                 \
     unzip                                                \
     portaudio19-dev                                      \
@@ -19,19 +19,20 @@ RUN apt-get update && apt-get upgrade && DEBIAN_FRONTEND=noninteractive apt-get 
     librtmidi1 &&                                        \
     apt-get clean
 
-# download extempore
-RUN curl -L -o extempore.zip http://github.com/digego/extempore/zipball/nodevice-audio/ && unzip extempore.zip && mv $(ls | grep extempore) extempore
 # download, patch, and build LLVM
 RUN curl -O http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz &&                                                                                           \
     tar -xf llvm-3.4.1.src.tar.gz &&                                                                                                                          \
     cd /llvm-3.4.1.src/lib/AsmParser &&                                                                                                                       \
-    patch < /extempore/extras/llparser.patch &&                                                                                                               \
+    curl -s curl -s https://raw.githubusercontent.com/digego/extempore/master/extras/llparser.patch | patch -i - &&                                                                                                               \
     cd /llvm-3.4.1.src &&                                                                                                                                     \
     mkdir /llvm-build &&                                                                                                                                      \
     ./configure --prefix=/llvm-build --disable-shared --enable-optimized --enable-targets=host --disable-bindings --enable-curses=no --enable-terminfo=no  && \
     make install &&                                                                                                                                           \
     cd / &&                                                                                                                                                   \
     rm -rf /llvm-3.4.1.src
+
+# download extempore
+RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/nodevice-audio/ && unzip source.zip && mv $(ls | grep extempore) extempore && rm source.zip
 
 # set LLVM environment var
 ENV EXT_LLVM_DIR /llvm-build
