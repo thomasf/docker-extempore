@@ -19,8 +19,8 @@ RUN apt-get update && apt-get upgrade && DEBIAN_FRONTEND=noninteractive apt-get 
     librtmidi1 &&                                        \
     apt-get clean
 
-# download extempore master branch
-RUN curl -L -o master.zip http://github.com/digego/extempore/zipball/master/ && unzip master.zip && mv $(ls | grep extempore) extempore
+# download extempore
+RUN curl -L -o extempore.zip http://github.com/digego/extempore/zipball/nodevice-audio/ && unzip extempore.zip && mv $(ls | grep extempore) extempore
 # download, patch, and build LLVM
 RUN curl -O http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz &&                                                                                           \
     tar -xf llvm-3.4.1.src.tar.gz &&                                                                                                                          \
