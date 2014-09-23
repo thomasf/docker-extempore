@@ -5,7 +5,7 @@ MAINTAINER Ben Swift <benjamin.j.swift@gmail.com>
 
 # get deps
 RUN apt-get update && apt-get upgrade && DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
-    git                                                  \
+    # git                                                  \
     binutils                                             \
     g++                                                  \
     curl                                                 \
