@@ -6,17 +6,17 @@ MAINTAINER Ben Swift <benjamin.j.swift@gmail.com>
 # get deps
 RUN apt-get update --yes && apt-get upgrade --yes && apt-get install --yes \
     binutils                                             \
-    g++                                                  \
     curl                                                 \
-    patch                                                \
-    make                                                 \
-    unzip                                                \
-    portaudio19-dev                                      \
-    libpcre3-dev                                         \
-    libgl1-mesa-dev                                      \
+    g++                                                  \
     libasound2                                           \
-    python                                               \
+    libgl1-mesa-dev                                      \
+    libpcre3-dev                                         \
     librtmidi1 &&                                        \
+    make                                                 \
+    patch                                                \
+    portaudio19-dev                                      \
+    python                                               \
+    unzip                                                \
     apt-get clean
 
 # download, patch, and build LLVM
@@ -32,7 +32,10 @@ RUN curl -O http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz &&             
     rm -rf /llvm-3.4.1.src
 
 # download extempore
-RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/nodevice-audio/ && unzip source.zip && mv $(ls | grep extempore) extempore && rm source.zip # cache-busting comment
+RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/nodevice-audio/ && \
+    unzip source.zip && \
+    mv $(ls | grep extempore) extempore && \
+    rm source.zip
 
 # set LLVM environment var
 ENV EXT_LLVM_DIR /llvm-build
