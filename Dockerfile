@@ -16,7 +16,7 @@ RUN apt-get update --yes && apt-get install --yes \
     patch                                         \
     portaudio19-dev                               \
     python                                        \
-    unzip                                         \
+    unzip &&                                      \
     apt-get clean
 
 # download, patch, and build LLVM
