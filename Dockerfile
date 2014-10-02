@@ -47,9 +47,7 @@ ENV EXT_LLVM_DIR /llvm-build
 # build extempore
 RUN cd /extempore && ./all.bash
 
-# extempore primary process
-EXPOSE 7098 
-# extempore utility process
-EXPOSE 7099 
+# extempore primary & utility process ports
+EXPOSE 7099 7098
 
 ENTRYPOINT ["/extempore/extempore"]
