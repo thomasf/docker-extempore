@@ -8,7 +8,6 @@ RUN apt-get update --yes && apt-get install --yes \
     binutils                                      \
     curl                                          \
     g++                                           \
-    kmod                                          \
     libasound2                                    \
     libgl1-mesa-dev                               \
     libpcre3-dev                                  \
@@ -38,7 +37,7 @@ RUN curl -O http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz &&             
     rm -rf /llvm-3.4.1.src
 
 # download extempore
-RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/master/ && \
+RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/nodevice-audio/ && \
     unzip source.zip &&                                                                 \
     mv $(ls | grep extempore) extempore &&                                              \
     rm source.zip
@@ -50,7 +49,5 @@ RUN cd /extempore && ./all.bash
 
 # extempore primary & utility process ports
 EXPOSE 7099 7098
-
-RUN modprobe snd-dummy
 
 ENTRYPOINT ["/extempore/extempore"]
