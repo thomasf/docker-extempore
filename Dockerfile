@@ -1,9 +1,9 @@
-FROM debian:wheezy
+FROM debian:testing
 
 # based on an original dockerfile by Sébastien Rannou
 MAINTAINER Ben Swift <benjamin.j.swift@gmail.com>
 
-# get deps
+# get deps (listed in alphabetical order)
 RUN apt-get update --yes && apt-get install --yes \
     binutils                                      \
     curl                                          \
@@ -11,7 +11,6 @@ RUN apt-get update --yes && apt-get install --yes \
     libasound2                                    \
     libgl1-mesa-dev                               \
     libpcre3-dev                                  \
-    librtmidi1 &&                                 \
     make                                          \
     patch                                         \
     portaudio19-dev                               \
