@@ -8,6 +8,7 @@ RUN apt-get update --yes && apt-get install --yes \
     binutils                                      \
     curl                                          \
     g++                                           \
+    kmod                                          \
     libasound2                                    \
     libgl1-mesa-dev                               \
     libpcre3-dev                                  \
@@ -49,5 +50,7 @@ RUN cd /extempore && ./all.bash
 
 # extempore primary & utility process ports
 EXPOSE 7099 7098
+
+RUN modprobe snd-dummy
 
 ENTRYPOINT ["/extempore/extempore"]
