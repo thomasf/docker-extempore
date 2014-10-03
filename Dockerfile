@@ -42,10 +42,12 @@ RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/nodevice-au
     mv $(ls | grep extempore) extempore &&                                              \
     rm source.zip
 
+WORKDIR extempore
+
 # set LLVM environment var
 ENV EXT_LLVM_DIR /llvm-build
 # build extempore
-RUN cd /extempore && ./all.bash
+RUN ./all.bash
 
 # extempore primary & utility process ports
 EXPOSE 7099 7098
