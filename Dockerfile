@@ -16,7 +16,7 @@ RUN apt-get update --yes && apt-get install --yes \
     portaudio19-dev                               \
     python                                        \
     unzip &&                                      \
-    apt-get clean
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # download, patch, and build LLVM
 RUN curl -O http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz &&                                                 \
@@ -49,6 +49,17 @@ ENV EXT_LLVM_DIR /llvm-build
 # build extempore
 RUN ./all.bash
 
+# remove build-time deps from image
+RUN apt-get purge \
+    binutils      \
+    curl          \
+    g++           \
+    libpcre3-dev  \
+    make          \
+    patch         \
+    python        \
+    unzip
+    
 # extempore primary & utility process ports
 EXPOSE 7099 7098
 
