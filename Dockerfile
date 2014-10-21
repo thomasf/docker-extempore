@@ -53,14 +53,14 @@ ENV EXT_LLVM_DIR /llvm-build
 RUN ./all.bash
 
 # remove build-time deps from image
-RUN apt-get purge \
-    binutils      \
-    curl          \
-    g++           \
-    libpcre3-dev  \
-    make          \
-    patch         \
-    python        \
+RUN apt-get remove --autoremove --purge \
+    binutils                            \
+    curl                                \
+    g++                                 \
+    libpcre3-dev                        \
+    make                                \
+    patch                               \
+    python                              \
     unzip
     
 # extempore primary & utility process ports
