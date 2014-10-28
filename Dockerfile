@@ -3,8 +3,9 @@ FROM debian:testing
 # based on an original dockerfile by Sébastien Rannou
 MAINTAINER Ben Swift <benjamin.j.swift@gmail.com>
 
-# which GitHub branch to build Extempore from
+# some configuration environment variables
 ENV EXTEMPORE_GH_BRANCH nodevice-audio
+ENV EXTEMPORE_BUILD_STDLIB true
 
 # get deps (listed in alphabetical order)
 RUN apt-get update --yes && apt-get install --yes \
@@ -51,6 +52,9 @@ WORKDIR extempore
 ENV EXT_LLVM_DIR /llvm-build
 # build extempore
 RUN ./all.bash
+
+# build the stdlib (if necessary)
+RUN if [ "$EXTEMPORE_BUILD_STDLIB" == "true" ]; then ./compile-stdlib.sh; fi
 
 # remove build-time deps from image
 RUN apt-get remove --purge --yes \
