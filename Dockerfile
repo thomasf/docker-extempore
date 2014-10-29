@@ -52,9 +52,8 @@ ENV EXT_LLVM_DIR /llvm-build
 # build extempore
 RUN ./all.bash
 
-# build the stdlib (if necessary)
-ENV EXTEMPORE_BUILD_STDLIB true # -e EXTEMPORE_BUILD_STDLIB false to not build the stdlib
-RUN if [ "$EXTEMPORE_BUILD_STDLIB" == "true" ]; then ./compile-stdlib.sh; fi
+# build the stdlib (comment out if you don't want it)
+RUN ./compile-stdlib-core.sh
 
 # remove build-time deps from image
 RUN apt-get remove --purge --yes \
