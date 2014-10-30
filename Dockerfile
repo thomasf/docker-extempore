@@ -39,6 +39,18 @@ RUN curl -O http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz &&             
     cd / &&                                                                                                         \
     rm -rf /llvm-3.4.1.src
 
+# download and build nanomsg (filthy hack - should be it's own container)
+RUN curl -L -o source.tar.gz http://download.nanomsg.org/nanomsg-0.4-beta.tar.gz && \
+    tar xvf source.tar.gz &&                                                        \
+    mv $(ls | grep nanomsg) nanomsg &&                                              \
+    rm source.tar.gz &&                                                             \
+    cd nanomsg &&                                                                   \
+    ./configure &&                                                                  \
+    make &&                                                                         \
+    cp .libs/libnanomsg.so.0.2.0 /usr/local/lib &&                                  \
+    ln -s /usr/local/lib/libnanomsg.so.0.2.0 /usr/local/lib/libnanomsg.so &&        \
+    cd / && rm -r nanomsg
+
 # download extempore
 RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/$EXTEMPORE_GH_BRANCH/ && \
     unzip source.zip &&                                                                       \
