@@ -78,7 +78,7 @@ RUN apt-get remove --purge --yes \
     python                       \
     unzip
     
-# extempore primary & utility process ports
-EXPOSE 7099 7098
+# extempore primary & utility process ports, plus nanomsg port
+EXPOSE 7099 7098 7199
 
 ENTRYPOINT ["/extempore/extempore"]
