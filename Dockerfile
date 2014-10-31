@@ -65,7 +65,7 @@ ENV EXT_LLVM_DIR /llvm-build
 RUN ./all.bash
 
 # build the stdlib (comment out if you don't want it)
-RUN ./compile-stdlib-core.sh
+RUN PRECOMP_LIBS="core/std.xtm core/math.xtm" ./compile-stdlib.sh
 
 # remove build-time deps from image
 RUN apt-get remove --purge --yes \
