@@ -55,7 +55,7 @@ RUN curl -L -o source.tar.gz http://download.nanomsg.org/nanomsg-0.4-beta.tar.gz
 RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/$EXTEMPORE_GH_BRANCH/ && \
     unzip source.zip &&                                                                       \
     mv $(ls | grep extempore) extempore &&                                                    \
-    rm source.zip
+    rm source.zip # cache-busting comment
 
 WORKDIR extempore
 
