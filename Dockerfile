@@ -4,7 +4,7 @@ FROM debian:testing
 MAINTAINER Ben Swift <benjamin.j.swift@gmail.com>
 
 # which GitHub branch to build Extempore from
-ENV EXTEMPORE_GH_BRANCH nodevice-audio
+ENV EXTEMPORE_GH_BRANCH master
 
 # get deps (listed in alphabetical order)
 RUN apt-get update --yes && apt-get install --yes \
