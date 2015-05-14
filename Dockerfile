@@ -3,9 +3,6 @@ FROM debian:testing
 # based on an original dockerfile by Sébastien Rannou
 MAINTAINER Ben Swift <benjamin.j.swift@gmail.com>
 
-# which GitHub branch to build Extempore from
-ENV EXTEMPORE_GH_BRANCH master
-
 # get deps (listed in alphabetical order)
 RUN apt-get update --yes && apt-get install --yes \
     binutils                                      \
@@ -39,6 +36,9 @@ RUN curl -O http://llvm.org/releases/3.4.1/llvm-3.4.1.src.tar.gz &&             
     make install &&                                                                                                 \
     cd / &&                                                                                                         \
     rm -rf /llvm-3.4.1.src
+
+# which GitHub branch to build Extempore from
+ENV EXTEMPORE_GH_BRANCH master
 
 # download extempore
 RUN curl -L -o source.zip http://github.com/digego/extempore/zipball/$EXTEMPORE_GH_BRANCH/ && \
