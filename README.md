@@ -3,11 +3,15 @@
 This is just a slightly different version of https://github.com/benswift/docker-extempore
 
 
-**Plans**:
+# TODO/PLANS
 
+* Add additional libs and stuff.
+* Support alsa/portaudio or whatever is needed for direct audio/midi (I've only used extempore in osx before so I really don't know)
 * Have tagged releases @ dockerhub
 * Docker compose configuration for quick development
 * Some utility to extract/configure the emacs stuff thats inside the image.
+
+alsa in docker: http://stackoverflow.com/a/28985715/1244907
 
 ## Using docker
 
